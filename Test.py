@@ -1,14 +1,7 @@
-'''
-Created on 8 Aug 2013
-
-@author: andreww
-'''
 import unittest
 import inspect
 
 __unittest = True
-
-# from os.path import basename, splitext
 
 def skip(reason='Skip'):
     return unittest.skip(reason)
@@ -52,10 +45,6 @@ class TestCase(unittest.TestCase):
         return userMsg
 
     def __getTestCaseName(self):
-        # base = basename(inspect.stack()[0][1])
-        # fname = splitext(base)[0]
-        # cname = self.__class__.__name__
-        # test_case_name = self.id().replace(".", "_")
         stack_level_of_calling_method = 3
         index_to_method_name = 3
         return inspect.stack()[stack_level_of_calling_method][index_to_method_name]
