@@ -11,7 +11,7 @@ class parameterized:
         self.kwargs = kwargs
 
     def __call__(self, fn):
-        def test_wrapped(itself, **kwargs):
+        def test_wrapped(itself):
             size = len(self.kwargs[list(self.kwargs.keys())[0]])
             for index in range(size):
                 test_method_parameters = {k: self.kwargs[k][index] for k in self.kwargs}
