@@ -6,19 +6,17 @@ __unittest = True
 def skip(reason='Skip'):
     return unittest.skip(reason)
 
-class parameterize:
+class parameterized:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
     def __call__(self, fn):
-        def test_wrapped(*args, **kwargs):
-            # print(self.kwargs)
+        def test_wrapped(itself, **kwargs):
             size = len(self.kwargs[list(self.kwargs.keys())[0]])
-            #print(size)
             for index in range(size):
-                d = {k: self.kwargs[k][index] for k in self.kwargs}
-                #print(d)
-                fn(*args, **d)
+                test_method_parameters = {k: self.kwargs[k][index] for k in self.kwargs}
+                with itself.subTest(**test_method_parameters):
+                    fn(itself, **test_method_parameters)
 
         return test_wrapped
 
