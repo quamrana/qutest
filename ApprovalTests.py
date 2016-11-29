@@ -1,8 +1,10 @@
 import os  # for SimpleNamer
 import inspect  # for SimpleNamer
 import sys
+from configparser import ConfigParser
 
 import subprocess
+
 
 class SimpleNamer():
     def __init__(self, testcase):
@@ -15,25 +17,39 @@ class TextFileApprover():
         bounds = '--\n'
         self.actual = bounds + str(data) + '\n' + bounds
         self.namer = namer
+        self.findTortoiseMerge()
+
+    def findTortoiseMerge(self):
+        self.tortoiseMerge = r'C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe'
+        config = ConfigParser()
+        config.read('ApprovalsTests.ini')
+        try:
+            self.tortoiseMerge = config['TortoiseMerge'].get('FullPath', raw=True, fallback=self.tortoiseMerge)
+        except KeyError:
+            pass
 
     def extensionName(self):
         return 'txt'
 
     def approvedName(self):
         return '.approved'
+
     def receivedName(self):
         return '.received'
 
     def makeFilenameWith(self, insert):
-        return os.path.join(self.namer.source_file_path, '_' + self.namer.test_case_name + insert + os.path.extsep + self.extensionName())
+        return os.path.join(self.namer.source_file_path,
+                            '_' + self.namer.test_case_name + insert + os.path.extsep + self.extensionName())
 
     def approvedFilename(self):
         return self.makeFilenameWith(self.approvedName())
+
     def receivedFileName(self):
         return self.makeFilenameWith(self.receivedName())
 
     def readFileMode(self):
         return 'r'
+
     def writeFileMode(self):
         return 'w'
 
@@ -64,7 +80,7 @@ class TextFileApprover():
             pass
 
     def diffProgram(self):
-        return r'C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe'
+        return self.tortoiseMerge
 
     def startDiff(self, receivedFileName, approvedFilename):
         fmt = '{0}'
@@ -94,6 +110,7 @@ class TextFileApprover():
 def GetApprover(data, testcase):
     namer = SimpleNamer(testcase)
     return TextFileApprover(data, namer)
+
 
 class Approvals():
     def verify(self, testcase, data):
