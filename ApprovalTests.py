@@ -6,10 +6,28 @@ from configparser import ConfigParser
 import subprocess
 
 
+def common_overlap(predecessor, successor):
+    for index in range(len(predecessor)):
+        reverse_index = -(index + 1)
+        subset = predecessor[reverse_index:]
+        front = successor[:-reverse_index]
+        if subset == front:
+            return subset
+    return []
+
+
 class SimpleNamer():
     def __init__(self, testcase):
-        self.test_case_name = testcase.id().replace(".", "_")
-        self.source_file_path = os.path.dirname(inspect.getfile(testcase.__class__))
+        testcase_id = testcase.id()
+        source_file_path = os.path.dirname(inspect.getfile(testcase.__class__))
+
+        successor = testcase_id.split('.')
+        predecessor = source_file_path.split('\\')
+        common = common_overlap(predecessor, successor)
+        successor = successor[len(common):]
+
+        self.test_case_name = '_'.join(successor)  # testcase_id.replace(".", "_")
+        self.source_file_path = source_file_path
 
 
 class TextFileApprover():
