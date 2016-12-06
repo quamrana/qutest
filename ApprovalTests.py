@@ -26,7 +26,7 @@ class SimpleNamer():
         common = common_overlap(predecessor, successor)
         successor = successor[len(common):]
 
-        self.test_case_name = '_'.join(successor)  # testcase_id.replace(".", "_")
+        self.test_case_name = '_'.join(successor)
         self.source_file_path = source_file_path
 
 
