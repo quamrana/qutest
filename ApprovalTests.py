@@ -104,7 +104,13 @@ class TextFileApprover():
         fmt = '{0}'
         rFile = fmt.format(receivedFileName)
         aFile = fmt.format(approvedFilename)
-        subprocess.call([self.diffProgram(), rFile, aFile])
+        command=[self.diffProgram(), rFile, aFile]
+        try:
+            subprocess.call(command)
+        except Exception as e:
+            print(e)
+            print("when calling command: ",command)
+            
 
     def createEmpty(self, fileName):
         open(fileName, 'a')
