@@ -41,3 +41,6 @@ class ApprovalsTestCase(TestCase):
             else:
                 name = 'call%s' % name
         return self._format_call_signature(name, args, kwargs)
+
+    def verify(self,data):
+        self.Approvals.verify(self,data)
