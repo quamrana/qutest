@@ -3,8 +3,10 @@ import inspect
 
 __unittest = True
 
+
 def skip(reason='Skip'):
     return unittest.skip(reason)
+
 
 class parameterized:
     def __init__(self, **kwargs):
@@ -26,6 +28,11 @@ class TestCase(unittest.TestCase):
         userMsg = self.__getUserMessage(userMsg)
         msg = "%s should be %s" % (userMsg, expected)
         self.assertEqual(actual, expected, msg)
+
+    def shouldNotEqual(self, actual, expected, userMsg=None):
+        userMsg = self.__getUserMessage(userMsg)
+        msg = "%s should not be %s" % (userMsg, expected)
+        self.assertNotEqual(actual, expected, msg)
 
     def shouldBeTrue(self, actual, userMsg=None):
         userMsg = self.__getUserMessage(userMsg)
