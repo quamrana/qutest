@@ -9,6 +9,16 @@ def skip(reason='Skip'):
 
 
 class parameterized:
+    '''
+    Use this decorator on test methods like this:
+    @parameterized(actual=[5,6],expected=[5,6])
+    def test3(self, actual, expected):
+        self.shouldEqual(actual,expected)
+
+    The example uses parameters actual and expected, but they can be anything you like, as long
+    as the parameters match in number and name.
+    This decorator uses unittest.TestCase.subTest to separately markup every failing test.
+    '''
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
