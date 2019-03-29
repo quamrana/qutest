@@ -37,12 +37,12 @@ class TestCase(unittest.TestCase):
     def shouldEqual(self, actual, expected, userMsg=None):
         userMsg = self.__getUserMessage(userMsg)
         msg = "%s should be %s" % (userMsg, expected)
-        self.assertEqual(actual, expected, msg)
+        self.assertEqual(expected, actual, msg)
 
     def shouldNotEqual(self, actual, expected, userMsg=None):
         userMsg = self.__getUserMessage(userMsg)
         msg = "%s should not be %s" % (userMsg, expected)
-        self.assertNotEqual(actual, expected, msg)
+        self.assertNotEqual(expected, actual, msg)
 
     def shouldBeTrue(self, actual, userMsg=None):
         userMsg = self.__getUserMessage(userMsg)

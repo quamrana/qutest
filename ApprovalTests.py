@@ -113,7 +113,8 @@ class TextFileApprover():
             
 
     def createEmpty(self, fileName):
-        open(fileName, 'a')
+        with open(fileName, 'a') as _:
+            pass
 
     def touchApproved(self):
         if not self.approved_exists():
