@@ -29,6 +29,25 @@ class SimpleNamer():
         self.test_case_name = '_'.join(successor)
         self.source_file_path = source_file_path
 
+    def _extensionName(self):
+        return 'txt'
+
+    def _approvedName(self):
+        return '.approved'
+
+    def _receivedName(self):
+        return '.received'
+
+    def _makeFilenameWith(self, insert):
+        return os.path.join(self.source_file_path,
+                            '_' + self.test_case_name + insert + os.path.extsep + self._extensionName())
+
+    def approvedFilename(self):
+        return self._makeFilenameWith(self._approvedName())
+
+    def receivedFileName(self):
+        return self._makeFilenameWith(self._receivedName())
+
 
 class TextFileApprover():
     def __init__(self, data, namer):
@@ -46,24 +65,7 @@ class TextFileApprover():
         except KeyError:
             pass
 
-    def extensionName(self):
-        return 'txt'
 
-    def approvedName(self):
-        return '.approved'
-
-    def receivedName(self):
-        return '.received'
-
-    def makeFilenameWith(self, insert):
-        return os.path.join(self.namer.source_file_path,
-                            '_' + self.namer.test_case_name + insert + os.path.extsep + self.extensionName())
-
-    def approvedFilename(self):
-        return self.makeFilenameWith(self.approvedName())
-
-    def receivedFileName(self):
-        return self.makeFilenameWith(self.receivedName())
 
     def readFileMode(self):
         return 'r'
@@ -73,7 +75,7 @@ class TextFileApprover():
 
     def approved_exists(self):
         try:
-            fname = self.approvedFilename()
+            fname = self.namer.approvedFilename()
             with open(fname, self.readFileMode()) as f:
                 self.approved = f.read()
                 return True
@@ -88,12 +90,12 @@ class TextFileApprover():
         testcase.fail(self.namer.test_case_name)
 
     def writeReceived(self):
-        with open(self.receivedFileName(), self.writeFileMode()) as f:
+        with open(self.namer.receivedFileName(), self.writeFileMode()) as f:
             f.write(self.actual)
 
     def removeReceived(self):
         try:
-            os.remove(self.receivedFileName())
+            os.remove(self.namer.receivedFileName())
         except IOError:
             pass
 
@@ -118,11 +120,11 @@ class TextFileApprover():
 
     def touchApproved(self):
         if not self.approved_exists():
-            self.createEmpty(self.approvedFilename())
+            self.createEmpty(self.namer.approvedFilename())
 
     def report(self):
         self.touchApproved()
-        self.startDiff(self.receivedFileName(), self.approvedFilename())
+        self.startDiff(self.namer.receivedFileName(), self.namer.approvedFilename())
 
     def actualAndApprovedMatch(self):
         if self.approved_exists():
